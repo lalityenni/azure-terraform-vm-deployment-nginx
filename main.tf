@@ -13,8 +13,23 @@ resource "random_integer" "suffix" {
   
 }
 
-resource "azurerm_resource_group" "main" {
+resource "azurerm_resource_group" "rg" {
   name     = "${local.name_prefix}-${random_integer.suffix.result}"
   location = var.location
   tags     = local.tags
+}
+
+resource "azure_virtual_network" "vnet" {
+  name                = "vnet-${local.name_prefix}"
+  address_space       = ["10.10.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  tags                = local.tags
+
+}
+resource "azure_subnet" "subnet" {
+  name                 = "subnet-${local.name_prefix}"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azure_virtual_network.vnet.name
+  address_prefixes     = ["10.10.1.0/24"] 
 }

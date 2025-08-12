@@ -11,6 +11,8 @@ override.tf.json
 *_override.tf.json
 terraform.tfvars
 terraform.tfvars.json
+# Local Terraform variable files
+*.tfvars
 
 # macOS
 .DS_Store
