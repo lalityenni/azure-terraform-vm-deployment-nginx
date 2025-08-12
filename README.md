@@ -1,0 +1,12 @@
+# Azure VM Deployment with Terraform & Nginx
+
+Provision an Ubuntu 22.04 VM on Azure with VNet, NSG (SSH & HTTP), Public IP, NIC,
+and cloud-init to install Nginx.
+
+**Tech:** Azure, Terraform, GitHub Actions (OIDC), PowerShell (validation)
+
+## How to run (local)
+- az login
+- terraform init
+- terraform plan
+- terraform apply
