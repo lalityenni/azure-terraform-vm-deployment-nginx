@@ -1,18 +1,14 @@
-# Terraform
+# Terraform state (never commit)
 *.tfstate
 *.tfstate.*
 .crash
 *.log
 .terraform/
-.terraform.lock.hcl
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-terraform.tfvars
-terraform.tfvars.json
-# Local Terraform variable files
-*.tfvars
 
-# macOS
+
+*.tfvars              # ignore all tfvars by default
+!env/*.tfvars         # but allow env/ dev & prod tfvars to be committed
+terraform.tfvars.json # local JSON tfvars stays ignored
+
+
 .DS_Store
