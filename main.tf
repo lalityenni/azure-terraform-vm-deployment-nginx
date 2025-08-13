@@ -13,7 +13,7 @@ resource "random_integer" "suffix" {
   min = 1000
   max = 9999
 }
- # ===== Resource Group + Network Resources =====
+# ===== Resource Group + Network Resources =====
 resource "azurerm_resource_group" "rg" {
   name     = "${local.name_prefix}-${random_integer.suffix.result}"
   location = var.location
@@ -39,11 +39,11 @@ resource "azurerm_subnet" "subnet" {
   name                 = "subnet-${local.name_prefix}"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.10.1.0/24"] 
+  address_prefixes     = ["10.10.1.0/24"]
 }
- 
- # Create a network security group (NSG) to control traffic to the VM
-resource "azurerm_network_security_group"  "nsg" {
+
+# Create a network security group (NSG) to control traffic to the VM
+resource "azurerm_network_security_group" "nsg" {
   name                = "nsg-${local.name_prefix}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -72,13 +72,13 @@ resource "azurerm_network_security_group"  "nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
-  
+
 }
 # Associate the NSG with the subnet
 resource "azurerm_network_security_group_association" "nsg_assoc" {
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
-  
+
 }
 # Create a public IP address for the VM
 resource "azurerm_public_ip" "public_ip" {
@@ -88,15 +88,15 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method   = "Static"
   sku                 = "Standard"
   tags                = local.tags
-  
+
 }
 # Create a network interface for the VM
 resource "azurerm_network_interface" "nic" {
   name                = "nic-${local.name_prefix}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  
-# Associate the NIC with the subnet and public IP
+
+  # Associate the NIC with the subnet and public IP
   ip_configuration {
     name                          = "ipconfig-${local.name_prefix}"
     subnet_id                     = azurerm_subnet.subnet.id
@@ -121,7 +121,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   resource_group_name = azurerm_resource_group.rg.name
   size                = "Standard_B1s"
 
-  admin_username      = var.admin_username
+  admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.nic.id]
 
   # SSH (reads your public key file path from variables/tfvars)
