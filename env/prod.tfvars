@@ -1,0 +1,4 @@
+project_name         = "azure-terraform-vmnginx-prod"
+location             = "East US 2"
+admin_username       = "azureuser"
+admin_ssh_public_key = "~/.ssh/id_ed25519.pub"
