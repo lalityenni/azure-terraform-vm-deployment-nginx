@@ -10,3 +10,4 @@ and cloud-init to install Nginx.
 - terraform init
 - terraform plan
 - terraform apply
+Testing plan workflow – dev & prod
