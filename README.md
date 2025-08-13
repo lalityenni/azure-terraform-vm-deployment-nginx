@@ -11,3 +11,5 @@ and cloud-init to install Nginx.
 - terraform plan
 - terraform apply
 Testing plan workflow – dev & prod
+
+Trigger CI: 2025-08-13T12:24:44
