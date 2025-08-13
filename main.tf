@@ -69,3 +69,35 @@ resource "azurerm_network_security_group_association" "nsg_assoc" {
   network_security_group_id = azurerm_network_security_group.nsg.id
   
 }
+
+resource "azurerm_public_ip" "public_ip" {
+  name                = "public-ip-${local.name_prefix}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  tags                = local.tags
+  
+}
+
+resource "azurerm_network_interface" "nic" {
+  name                = "nic-${local.name_prefix}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  
+
+  ip_configuration {
+    name                          = "ipconfig-${local.name_prefix}"
+    subnet_id                     = azurerm_subnet.subnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.public_ip.id
+  }
+  tags = local.tags
+}
+
+resource "azurerm_network_interface_security_group_association" "nic_nsg" {
+  network_interface_id      = azurerm_network_interface.nic.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+
+
+}
