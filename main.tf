@@ -75,11 +75,11 @@ resource "azurerm_network_security_group"  "nsg" {
   
 }
 # Associate the NSG with the subnet
-resource "azurerm_network_security_group_association" "nsg_assoc" {
+resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
-  
 }
+
 # Create a public IP address for the VM
 resource "azurerm_public_ip" "public_ip" {
   name                = "public-ip-${local.name_prefix}"
