@@ -103,11 +103,11 @@ resource "azurerm_network_interface" "nic" {
 
 # Linux VM
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "vm-${local.name_prefix}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1s"
-  admin_username      = var.admin_username
+  name                  = "vm-${local.name_prefix}"
+  resource_group_name   = azurerm_resource_group.rg.name
+  location              = azurerm_resource_group.rg.location
+  size                  = "Standard_B1s"
+  admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.nic.id]
 
   admin_ssh_key {
@@ -137,7 +137,7 @@ runcmd:
   - systemctl enable nginx
   - systemctl start nginx
 EOF
-)
+  )
 
   tags = local.tags
 }
