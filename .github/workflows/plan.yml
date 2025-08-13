@@ -1,0 +1,53 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+    branches:
+      - main  # PR into main = plan for prod
+      - dev   # PR into dev = plan for dev
+  push:
+    branches:
+      - dev   # Push to dev branch
+      - main  # Push to prod branch
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan (Dev)
+        if: github.ref == 'refs/heads/dev'
+        run: terraform plan -var-file="env/dev.tfvars"
+
+      - name: Terraform Plan (Prod)
+        if: github.ref == 'refs/heads/main'
+        run: terraform plan -var-file="env/prod.tfvars"
+
+      - name: Comment plan result on PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: terraform-plan
+          message: |
+            Terraform plan for branch **${{ github.ref_name }}** completed.
+            Check logs in the Actions tab for details.
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
