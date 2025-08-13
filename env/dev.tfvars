@@ -1,0 +1,5 @@
+environment       = "dev"
+project_name      = "nginx-dev"
+location          = "East US"
+admin_username    = "azureadmin"
+admin_ssh_public_key = "~/.ssh/id_rsa.pub"
