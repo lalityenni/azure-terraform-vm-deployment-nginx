@@ -1,0 +1,29 @@
+name: Terraform Plan
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: $\{\{ secrets.ARM_CLIENT_ID \}\}
+      ARM_CLIENT_SECRET: $\{\{ secrets.ARM_CLIENT_SECRET \}\}
+      ARM_SUBSCRIPTION_ID: $\{\{ secrets.ARM_SUBSCRIPTION_ID \}\}
+      ARM_TENANT_ID: $\{\{ secrets.ARM_TENANT_ID \}\}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+      - run: terraform init
+      - run: terraform fmt -check
+      - run: terraform validate
+      - if: github.ref == 'refs/heads/dev'
+        run: terraform plan -var-file="env/dev.tfvars"
+      - if: github.ref == 'refs/heads/main'
+        run: terraform plan -var-file="env/prod.tfvars"
