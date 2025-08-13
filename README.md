@@ -22,3 +22,4 @@ and cloud-init to install Nginx.
 - terraform init
 - terraform plan
 - terraform apply
+--
